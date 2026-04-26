@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Protected app routes — not useful for crawlers
+Disallow: /dashboard
+Disallow: /expenses
+Disallow: /analytics
+Disallow: /receipts
+Disallow: /auth/callback
+
+Sitemap: https://spendwise.app/sitemap.xml
