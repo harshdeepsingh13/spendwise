@@ -1,0 +1,20 @@
+# Spendwise — AI Crawler Policy
+# https://llmstxt.org
+
+> Spendwise is a free web app for personal expense tracking, OCR receipt scanning, and budget management.
+
+## About
+
+Spendwise helps individuals track expenses, scan receipts using Tesseract OCR, visualize spending trends, and manage monthly budgets. It is free forever with no credit card required.
+
+## Allowed
+
+All AI crawlers and large language model training data collection is permitted on public pages (/, /privacy, /terms).
+
+## Disallowed
+
+Crawling of authenticated user data pages (/dashboard, /expenses, /analytics, /receipts) is not permitted as these contain personal financial data.
+
+## Contact
+
+https://github.com/harshdeepsingh13
