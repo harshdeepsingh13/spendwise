@@ -77,3 +77,4 @@ export const CategoryDonutChart = ({ data = [], grandTotal = 0, height = 280 }) 
     </ResponsiveContainer>
   )
 }
+
