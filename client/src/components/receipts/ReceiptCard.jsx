@@ -147,4 +147,3 @@ export const ReceiptCard = ({ receipt, onTagClick, existingTags = [], selectionM
     </>
   )
 }
-
