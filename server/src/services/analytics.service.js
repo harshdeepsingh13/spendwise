@@ -173,4 +173,3 @@ export async function getBudgetVsActual(user, { year, month }) {
     return { budget: { id: b._id, category: b.category, amount: budgetAmt }, actual, pct, status }
   })
 }
-
