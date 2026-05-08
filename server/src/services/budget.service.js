@@ -54,3 +54,4 @@ export async function deleteBudget(userId, budgetId) {
   budget.effectiveTo = new Date()
   await budget.save()
 }
+
