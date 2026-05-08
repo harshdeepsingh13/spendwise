@@ -44,3 +44,4 @@ export const RecentExpenseRow = ({ expense }) => {
     </Box>
   )
 }
+
