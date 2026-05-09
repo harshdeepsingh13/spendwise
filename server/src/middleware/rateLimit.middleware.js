@@ -7,3 +7,4 @@ export const authRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 })
+
