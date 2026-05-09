@@ -232,3 +232,4 @@ export async function disableMfa(userId, totpCode) {
   user.mfaTempSecret = undefined
   await user.save()
 }
+
