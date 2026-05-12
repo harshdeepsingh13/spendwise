@@ -46,3 +46,4 @@ export const BudgetProgressBar = ({ budget, actual, pct, status }) => {
     </Box>
   )
 }
+
