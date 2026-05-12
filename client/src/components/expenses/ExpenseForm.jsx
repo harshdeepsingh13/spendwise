@@ -220,4 +220,3 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
     </>
   );
 };
-
