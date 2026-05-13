@@ -61,3 +61,4 @@ export const updateReceipt = async (req, res, next) => {
     next(err)
   }
 }
+
