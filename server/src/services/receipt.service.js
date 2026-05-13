@@ -78,3 +78,4 @@ export async function updateReceipt(receiptId, userId, { amount, name, tags, sub
   await receipt.save()
   return receipt
 }
+
