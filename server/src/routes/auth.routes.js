@@ -43,3 +43,4 @@ router.post('/mfa/validate',     authRateLimit,  validateMfaLogin)
 router.delete('/mfa',            authMiddleware, disableMfaHandler)
 
 export default router
+
