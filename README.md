@@ -153,3 +153,4 @@ All data fetching follows TanStack Query patterns:
 - OAuth credentials needed for login testing
 - Cloudinary upload requires valid API credentials for receipt upload
 - Tesseract OCR requires internet connection for model downloads
+
