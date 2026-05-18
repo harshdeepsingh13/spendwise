@@ -56,3 +56,4 @@ export const ExpenseRow = ({ expense, onEdit }) => {
     </Box>
   );
 };
+
