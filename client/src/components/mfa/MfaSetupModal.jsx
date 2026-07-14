@@ -55,10 +55,11 @@ export function MfaSetupModal({ open, onClose, onSuccess }) {
   return (
     <AppModal open={open} onClose={handleClose} title="Enable Two-Factor Authentication">
       {error && <Alert severity="error">{error}</Alert>}
-
       {step === 'init' && (
         <>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{
+            color: "text.secondary"
+          }}>
             Add an extra layer of security to your account. You'll need an authenticator app
             (Google Authenticator, Authy, etc.) on your phone.
           </Typography>
@@ -67,16 +68,22 @@ export function MfaSetupModal({ open, onClose, onSuccess }) {
           </Button>
         </>
       )}
-
       {step === 'scan' && (
         <>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{
+            color: "text.secondary"
+          }}>
             Scan this QR code with your authenticator app, then enter the 6-digit code to confirm.
           </Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <img src={qrCodeDataUrl} alt="MFA QR Code" width={200} height={200} />
           </Box>
-          <Typography variant="caption" color="text.secondary" sx={{ wordBreak: 'break-all' }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: "text.secondary",
+              wordBreak: 'break-all'
+            }}>
             Backup key: {base32}
           </Typography>
           <TextField
@@ -84,8 +91,10 @@ export function MfaSetupModal({ open, onClose, onSuccess }) {
             value={totpCode}
             onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             fullWidth
-            inputProps={{ inputMode: 'numeric', maxLength: 6 }}
             placeholder="000000"
+            slotProps={{
+              htmlInput: { inputMode: 'numeric', maxLength: 6 }
+            }}
           />
           <Button variant="contained" onClick={handleVerify} disabled={loading}>
             {loading ? <CircularProgress size={20} /> : 'Verify & Enable'}
@@ -93,5 +102,5 @@ export function MfaSetupModal({ open, onClose, onSuccess }) {
         </>
       )}
     </AppModal>
-  )
+  );
 }

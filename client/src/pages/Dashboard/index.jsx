@@ -82,7 +82,13 @@ const MomIcon = ({ pct }) => {
 const KpiCard = ({ label, value, subValue, isLoading, valueColor, accentColor = 'primary.main' }) => (
   <Card sx={{ height: '100%', borderTop: '3px solid', borderColor: accentColor }}>
     <CardContent>
-      <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+      <Typography
+        variant="overline"
+        sx={{
+          color: "text.secondary",
+          display: 'block',
+          mb: 0.5
+        }}>
         {label}
       </Typography>
       {isLoading ? (
@@ -93,7 +99,9 @@ const KpiCard = ({ label, value, subValue, isLoading, valueColor, accentColor = 
         </Typography>
       )}
       {subValue && (
-        <Typography variant="caption" color="text.secondary">{subValue}</Typography>
+        <Typography variant="caption" sx={{
+          color: "text.secondary"
+        }}>{subValue}</Typography>
       )}
     </CardContent>
   </Card>
@@ -166,10 +174,14 @@ export default function DashboardPage() {
         gap: 1,
       }}>
         <Box>
-          <Typography variant="h5" fontWeight={700}>
+          <Typography variant="h5" sx={{
+            fontWeight: 700
+          }}>
             {getGreeting()}, {firstName}
           </Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" sx={{
+            color: "text.secondary"
+          }}>
             Here&apos;s your financial snapshot for {now.format('MMMM YYYY')}
           </Typography>
         </Box>
@@ -182,7 +194,12 @@ export default function DashboardPage() {
           flexShrink: 0,
           display: { xs: 'none', sm: 'block' },
         }}>
-          <Typography variant="caption" color="text.secondary" display="block">Month total</Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              color: "text.secondary",
+              display: "block"
+            }}>Month total</Typography>
           {kpiLoading ? (
             <Skeleton width={60} height={24} />
           ) : (
@@ -192,10 +209,13 @@ export default function DashboardPage() {
           )}
         </Box>
       </Box>
-
       {/* KPI Strip */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={6} md={3}>
+        <Grid
+          size={{
+            xs: 6,
+            md: 3
+          }}>
           <KpiCard
             label="This Month"
             value={kpi ? `$${kpi.currentMonthTotal.toFixed(0)}` : null}
@@ -204,7 +224,11 @@ export default function DashboardPage() {
             accentColor="custom.amountGold"
           />
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid
+          size={{
+            xs: 6,
+            md: 3
+          }}>
           <KpiCard
             label="vs Last Month"
             isLoading={kpiLoading}
@@ -225,7 +249,11 @@ export default function DashboardPage() {
             }
           />
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid
+          size={{
+            xs: 6,
+            md: 3
+          }}>
           <KpiCard
             label="Top Category"
             isLoading={kpiLoading}
@@ -234,7 +262,11 @@ export default function DashboardPage() {
             accentColor="primary.main"
           />
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid
+          size={{
+            xs: 6,
+            md: 3
+          }}>
           <KpiCard
             label="Budget Health"
             isLoading={kpiLoading}
@@ -251,7 +283,6 @@ export default function DashboardPage() {
           />
         </Grid>
       </Grid>
-
       {/* Spending Trend */}
       <Card sx={{ mb: 3 }}>
         <CardHeader
@@ -289,10 +320,13 @@ export default function DashboardPage() {
           </ProGate>
         </CardContent>
       </Card>
-
       {/* Category Donut + Budget Tracker */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={6}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 6
+          }}>
           <Card sx={{ height: '100%' }}>
             <CardHeader
               title={
@@ -313,17 +347,28 @@ export default function DashboardPage() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 6
+          }}>
           <Card sx={{ height: '100%' }}>
             <CardHeader title="Budget Tracker" subheader={now.format('MMMM YYYY')} />
             <CardContent sx={{ pt: 1 }}>
               {budgetLoading ? (
-                <Stack gap={2}>
+                <Stack sx={{
+                  gap: 2
+                }}>
                   {[1, 2, 3].map(i => <Skeleton key={i} variant="rounded" height={48} />)}
                 </Stack>
               ) : topBudgets.length === 0 ? (
                 <Box sx={{ textAlign: 'center', py: 3 }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                      mb: 2
+                    }}>
                     No budgets set yet.
                   </Typography>
                   <Button size="small" variant="outlined" onClick={() => navigate('/analytics')}>
@@ -342,7 +387,13 @@ export default function DashboardPage() {
                     />
                   ))}
                   {budgetVsActual.length > 3 && (
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: "text.secondary",
+                        display: 'block',
+                        mb: 1
+                      }}>
                       Showing 3 of {budgetVsActual.length} budgets
                     </Typography>
                   )}
@@ -360,10 +411,13 @@ export default function DashboardPage() {
           </Card>
         </Grid>
       </Grid>
-
       {/* Recent Expenses + Recent Receipts */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={7}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 7
+          }}>
           <Card sx={{ height: '100%' }}>
             <CardHeader
               title="Recent Expenses"
@@ -371,12 +425,19 @@ export default function DashboardPage() {
             />
             <CardContent sx={{ pt: 1 }}>
               {dashLoading ? (
-                <Stack gap={1.5}>
+                <Stack sx={{
+                  gap: 1.5
+                }}>
                   {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} height={44} />)}
                 </Stack>
               ) : recentExpenses.length === 0 ? (
                 <Box sx={{ textAlign: 'center', py: 3 }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                      mb: 2
+                    }}>
                     No expenses yet. Add your first one.
                   </Typography>
                   <Button size="small" variant="outlined" onClick={() => navigate('/expenses')}>
@@ -394,7 +455,11 @@ export default function DashboardPage() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={5}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 5
+          }}>
           <Card sx={{ height: '100%' }}>
             <CardHeader
               title={
@@ -421,7 +486,12 @@ export default function DashboardPage() {
             <CardContent sx={{ pt: 1 }}>
               {recentReceipts.length === 0 ? (
                 <Box sx={{ textAlign: 'center', py: 3 }}>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary",
+                      mb: 2
+                    }}>
                     No receipts uploaded yet.
                   </Typography>
                   <Button
@@ -444,8 +514,7 @@ export default function DashboardPage() {
           </Card>
         </Grid>
       </Grid>
-
       <ScannerDialog open={scannerOpen} onClose={() => setScannerOpen(false)} />
     </PageContainer>
-  )
+  );
 }

@@ -34,22 +34,39 @@ export const ExpenseRow = ({ expense, onEdit }) => {
           }}
         />
         <Box sx={{ minWidth: 0 }}>
-          <Typography variant="body2" fontWeight={600} noWrap>
+          <Typography variant="body2" noWrap sx={{
+            fontWeight: 600
+          }}>
             {expense.category?.name ?? "Uncategorized"}
           </Typography>
           {expense.notes && (
-            <Typography variant="caption" color="text.secondary" noWrap display="block">
+            <Typography
+              variant="caption"
+              noWrap
+              sx={{
+                color: "text.secondary",
+                display: "block"
+              }}>
               {expense.notes}
             </Typography>
           )}
         </Box>
       </Box>
-
       <Box sx={{ textAlign: "right", flexShrink: 0, ml: 2 }}>
-        <Typography variant="body2" fontWeight={700} sx={{ color: "custom.amountGold" }}>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 700,
+            color: "custom.amountGold"
+          }}>
           ${amount}
         </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
+        <Typography
+          variant="caption"
+          sx={{
+            color: "text.secondary",
+            display: "block"
+          }}>
           {dayjs(expense.date).format("MMM D, YYYY")}
         </Typography>
       </Box>

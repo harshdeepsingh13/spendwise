@@ -104,7 +104,6 @@ export default function HowItWorks() {
           No setup, no complex onboarding. Sign up and start tracking immediately.
         </Typography>
       </Box>
-
       <Box sx={{ position: "relative" }}>
         <Box
           sx={{
@@ -119,7 +118,12 @@ export default function HowItWorks() {
         />
         <Grid container spacing={3}>
           {STEPS.map((step, i) => (
-            <Grid item xs={12} md={4} key={step.title}>
+            <Grid
+              key={step.title}
+              size={{
+                xs: 12,
+                md: 4
+              }}>
               <StepItem step={step} delay={i * 120} />
             </Grid>
           ))}

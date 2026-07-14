@@ -39,7 +39,9 @@ export function SecuritySettingsModal({ open, onClose, user }) {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box>
             <Typography variant="subtitle2">Two-Factor Authentication</Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{
+              color: "text.secondary"
+            }}>
               {mfaEnabled
                 ? 'Your account is protected with TOTP authentication.'
                 : 'Add an extra layer of security using an authenticator app.'}
@@ -63,7 +65,6 @@ export function SecuritySettingsModal({ open, onClose, user }) {
           </Button>
         )}
       </AppModal>
-
       <MfaSetupModal
         open={mfaSetupOpen}
         onClose={() => setMfaSetupOpen(false)}
@@ -75,5 +76,5 @@ export function SecuritySettingsModal({ open, onClose, user }) {
         onSuccess={handleMfaDisabled}
       />
     </>
-  )
+  );
 }

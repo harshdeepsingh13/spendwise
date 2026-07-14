@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined'
 import DownloadIcon from '@mui/icons-material/Download'
 import ImageIcon from '@mui/icons-material/Image'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
@@ -18,7 +18,7 @@ const STATUS_COLOR = {
 
 const getThumbnailUrl = (receipt) => {
   if (receipt.fileType !== 'pdf') return receipt.cloudinaryUrl
-  return receipt.cloudinaryUrl.replace(/\.pdf$/i, '.jpg')
+  return receipt.cloudinaryUrl.replace(/\.pdf$/i, '.jpg');
 }
 
 const getDownloadUrl = (cloudinaryUrl, filename) => {
@@ -50,10 +50,14 @@ const FileBar = ({ receipt, name }) => {
         : <ImageIcon sx={{ color: 'text.secondary', fontSize: 28, flexShrink: 0 }} />
       }
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography variant="body2" fontWeight={600} noWrap>
+        <Typography variant="body2" noWrap sx={{
+          fontWeight: 600
+        }}>
           {displayName}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" sx={{
+          color: "text.secondary"
+        }}>
           {isPdf ? 'PDF Receipt' : 'Image Receipt'}
         </Typography>
       </Box>
@@ -69,7 +73,7 @@ const FileBar = ({ receipt, name }) => {
         </IconButton>
       </Tooltip>
     </Box>
-  )
+  );
 }
 
 export const ReceiptEditDialog = ({ open, receipt, existingTags = [], onClose }) => {
@@ -130,11 +134,11 @@ export const ReceiptEditDialog = ({ open, receipt, existingTags = [], onClose })
           sx={{ width: '100%', maxHeight: 260, objectFit: 'contain', borderRadius: 1 }}
         />
       )}
-
       <FileBar receipt={receipt} name={name} />
-
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" sx={{
+          color: "text.secondary"
+        }}>
           {dayjs(receipt.createdAt).format('MMM D, YYYY')}
         </Typography>
         <Chip
@@ -144,7 +148,6 @@ export const ReceiptEditDialog = ({ open, receipt, existingTags = [], onClose })
           sx={{ height: 18, fontSize: '0.65rem' }}
         />
       </Box>
-
       <ReceiptDetailsForm
         name={name}
         onNameChange={setName}
@@ -155,5 +158,5 @@ export const ReceiptEditDialog = ({ open, receipt, existingTags = [], onClose })
         existingTags={existingTags}
       />
     </AppModal>
-  )
+  );
 }

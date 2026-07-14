@@ -7,12 +7,14 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <Box sx={{ bgcolor: 'background.elevated', border: '1px solid', borderColor: 'divider', borderRadius: 2, px: 1.5, py: 1 }}>
-      <Typography variant="caption" color="text.secondary">{label}</Typography>
+      <Typography variant="caption" sx={{
+        color: "text.secondary"
+      }}>{label}</Typography>
       <Typography variant="body2" sx={{ color: 'custom.amountGold', fontWeight: 600 }}>
         ${payload[0]?.value?.toFixed(2) ?? '0.00'}
       </Typography>
     </Box>
-  )
+  );
 }
 
 // data: [{ month: 1..12, year: 2026, total: number }] (from getSummary with groupBy='month')
@@ -29,9 +31,11 @@ export const SpendingTrendChart = ({ data = [], height = 240, variant = 'area' }
   if (!chartData.length) {
     return (
       <Box sx={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography color="text.secondary" variant="body2">No data for this period</Typography>
+        <Typography variant="body2" sx={{
+          color: "text.secondary"
+        }}>No data for this period</Typography>
       </Box>
-    )
+    );
   }
 
   const axisStyle = { fontSize: 11, fill: theme.palette.text.secondary }

@@ -117,7 +117,12 @@ export default function Testimonials() {
           </Box>
           <Grid container spacing={2.5}>
             {TESTIMONIALS.map((t, i) => (
-              <Grid item xs={12} md={4} key={t.name}>
+              <Grid
+                key={t.name}
+                size={{
+                  xs: 12,
+                  md: 4
+                }}>
                 <TestimonialCard t={t} delay={i * 120} />
               </Grid>
             ))}
@@ -125,5 +130,5 @@ export default function Testimonials() {
         </Box>
       </Box>
     </>
-  )
+  );
 }

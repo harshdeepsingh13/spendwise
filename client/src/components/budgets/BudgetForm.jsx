@@ -70,7 +70,12 @@ export const BudgetForm = ({ open, onClose, budget }) => {
       onClose={onClose}
       title={isEdit ? 'Edit Budget' : 'Set Budget'}
       actions={
-        <Stack direction="row" justifyContent="space-between" width="100%">
+        <Stack
+          direction="row"
+          sx={{
+            justifyContent: "space-between",
+            width: "100%"
+          }}>
           <Box>
             {isEdit && (
               <Button
@@ -84,7 +89,9 @@ export const BudgetForm = ({ open, onClose, budget }) => {
               </Button>
             )}
           </Box>
-          <Stack direction="row" gap={1}>
+          <Stack direction="row" sx={{
+            gap: 1
+          }}>
             <Button onClick={onClose} disabled={isBusy} color="inherit">Cancel</Button>
             <Button
               variant="contained"
@@ -102,7 +109,12 @@ export const BudgetForm = ({ open, onClose, budget }) => {
         <Select value={values.categoryId} onChange={set('categoryId')} label="Category" disabled={isEdit}>
           {categories.map(cat => (
             <MenuItem key={cat._id} value={cat._id}>
-              <Stack direction="row" alignItems="center" gap={1}>
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: "center",
+                  gap: 1
+                }}>
                 {cat.color && (
                   <Box component="span" sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: cat.color, flexShrink: 0 }} />
                 )}
@@ -112,28 +124,29 @@ export const BudgetForm = ({ open, onClose, budget }) => {
           ))}
         </Select>
       </FormControl>
-
       <TextField
         label="Monthly Budget"
         type="number"
-        inputProps={{ min: 0.01, step: '0.01' }}
         value={values.amount}
         onChange={set('amount')}
         fullWidth
         required
         placeholder="0.00"
-        InputProps={{ startAdornment: <Box component="span" sx={{ mr: 0.5, color: 'text.secondary' }}>$</Box> }}
-      />
-
+        slotProps={{
+          input: { startAdornment: <Box component="span" sx={{ mr: 0.5, color: 'text.secondary' }}>$</Box> },
+          htmlInput: { min: 0.01, step: '0.01' }
+        }} />
       <TextField
         label="Effective From"
         type="date"
         value={values.effectiveFrom}
         onChange={set('effectiveFrom')}
         fullWidth
-        InputLabelProps={{ shrink: true }}
         helperText="Budget applies from the start of this month onwards"
+        slotProps={{
+          inputLabel: { shrink: true }
+        }}
       />
     </AppModal>
-  )
+  );
 }

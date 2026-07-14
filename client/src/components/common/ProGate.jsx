@@ -25,7 +25,9 @@ export const ProGate = ({ locked, children }) => {
             </Box>
             <Box>
               <Typography variant="h6" sx={{ fontSize: '0.95rem' }}>Pro Feature</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" sx={{
+                color: "text.secondary"
+              }}>
                 Upgrade to Pro to unlock full history and advanced analytics
               </Typography>
             </Box>
@@ -36,5 +38,5 @@ export const ProGate = ({ locked, children }) => {
         </Card>
       </Box>
     </Box>
-  )
+  );
 }

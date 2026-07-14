@@ -76,10 +76,14 @@ const EmptyState = () => (
     }}
   >
     <ReceiptLongIcon sx={{ fontSize: 64, opacity: 0.3 }} />
-    <Typography variant="body1" color="text.secondary">
+    <Typography variant="body1" sx={{
+      color: "text.secondary"
+    }}>
       No receipts found
     </Typography>
-    <Typography variant="caption" color="text.secondary">
+    <Typography variant="caption" sx={{
+      color: "text.secondary"
+    }}>
       Tap the + button to scan your first receipt
     </Typography>
   </Box>
@@ -163,14 +167,15 @@ export default function Receipts() {
   return (
     <PageContainer>
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
-        <Typography variant="h5" fontWeight={700}>
+        <Typography variant="h5" sx={{
+          fontWeight: 700
+        }}>
           Receipts
         </Typography>
         <IconButton onClick={toggleSelectionMode} color={selectionMode ? "primary" : "default"} size="small">
           {selectionMode ? <CloseIcon /> : <ChecklistIcon />}
         </IconButton>
       </Box>
-
       <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2, flexWrap: "wrap" }}>
         <ToggleButtonGroup value={dateFilter} exclusive onChange={handleDateFilterChange} size="small">
           <ToggleButton value="week">This Week</ToggleButton>
@@ -187,7 +192,6 @@ export default function Receipts() {
           variant={customDateRange ? "filled" : "outlined"}
         />
       </Box>
-
       {allTags.length > 0 && (
         <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 1, mb: 2, flexWrap: "nowrap" }}>
           {allTags.map((tag) => (
@@ -202,25 +206,21 @@ export default function Receipts() {
           ))}
         </Box>
       )}
-
       {isLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress />
         </Box>
       )}
-
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           Failed to load receipts
         </Alert>
       )}
-
       {!isLoading && !error && receipts.length === 0 && <EmptyState />}
-
       {!isLoading && receipts.length > 0 && (
         <Grid container spacing={2}>
           {receipts.map((receipt) => (
-            <Grid item xs={12} key={receipt.id}>
+            <Grid key={receipt.id} size={12}>
               <ReceiptCard
                 receipt={receipt}
                 onTagClick={handleTagClick}
@@ -233,7 +233,6 @@ export default function Receipts() {
           ))}
         </Grid>
       )}
-
       {selectionMode && selectedIds.size > 0 && (
         <Box
           sx={{
@@ -254,13 +253,11 @@ export default function Receipts() {
           </Button>
         </Box>
       )}
-
       {!selectionMode && (
         <Fab color="primary" onClick={() => setScannerOpen(true)} sx={{ position: "fixed", bottom: 20, right: 20 }}>
           <AddIcon />
         </Fab>
       )}
-
       <ScannerDialog open={scannerOpen} onClose={onCloseAddModal} existingTags={allTags} />
       <CustomDateModal
         open={customDateModalOpen}

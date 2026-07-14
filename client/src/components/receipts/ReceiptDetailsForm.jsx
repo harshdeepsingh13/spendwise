@@ -30,19 +30,19 @@ export const ReceiptDetailsForm = ({
         value={name}
         onChange={(e) => onNameChange(e.target.value)}
       />
-
       <TextField
         label="Total Amount"
         value={amount}
         onChange={(e) => onAmountChange(e.target.value)}
         type="number"
-        inputProps={{ step: "0.01", min: "0" }}
-        InputProps={{
-          startAdornment: <Typography sx={{ color: "custom.amountGold", mr: 0.5, fontWeight: 700 }}>$</Typography>,
-        }}
         sx={{ "& .MuiInputBase-input": { color: "custom.amountGold", fontWeight: 700 } }}
-      />
+        slotProps={{
+          input: {
+            startAdornment: <Typography sx={{ color: "custom.amountGold", mr: 0.5, fontWeight: 700 }}>$</Typography>,
+          },
 
+          htmlInput: { step: "0.01", min: "0" }
+        }} />
       <Autocomplete
         multiple
         freeSolo
