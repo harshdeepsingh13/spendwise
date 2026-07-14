@@ -12,22 +12,26 @@ export const useCategories = () => {
 export const useCategoryMutations = () => {
   const queryClient = useQueryClient()
 
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: queryKeys.categories.all })
+
   const createMutation = useMutation({
     mutationFn: categoryService.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all })
-    }
+    onSuccess: invalidate
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => categoryService.update(id, data),
+    onSuccess: invalidate
   })
 
   const deleteMutation = useMutation({
     mutationFn: categoryService.delete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all })
-    }
+    onSuccess: invalidate
   })
 
   return {
     create: createMutation,
+    update: updateMutation,
     delete: deleteMutation
   }
 }

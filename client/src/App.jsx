@@ -9,6 +9,9 @@ const DashboardPage = lazy(() => import('./pages/Dashboard'))
 const ExpensesPage = lazy(() => import('./pages/Expenses'))
 const AnalyticsPage = lazy(() => import('./pages/Analytics'))
 const ReceiptsPage = lazy(() => import('./pages/Receipts'))
+const CategoriesPage = lazy(() => import('./pages/Categories'))
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPassword'))
+const ResetPasswordPage = lazy(() => import('./pages/ResetPassword'))
 const PrivacyPage = lazy(() => import('./pages/Privacy'))
 const TermsPage = lazy(() => import('./pages/Terms'))
 const NotFoundPage = lazy(() => import('./pages/NotFound'))
@@ -52,11 +55,13 @@ function AuthCallback() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route
             path="/dashboard"
             element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}
@@ -72,6 +77,10 @@ export default function App() {
           <Route
             path="/receipts"
             element={<ProtectedRoute><ReceiptsPage /></ProtectedRoute>}
+          />
+          <Route
+            path="/categories"
+            element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>}
           />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />

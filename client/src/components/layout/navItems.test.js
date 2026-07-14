@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { navItems } from './navItems.js'
 
 describe('navItems', () => {
-  it('exports an array with four items', () => {
+  it('exports an array with five items', () => {
     expect(Array.isArray(navItems)).toBe(true)
-    expect(navItems).toHaveLength(4)
+    expect(navItems).toHaveLength(5)
   })
 
   it('every item has path, label, and icon fields', () => {
@@ -16,11 +16,11 @@ describe('navItems', () => {
   })
 
   it('has correct paths in order', () => {
-    expect(navItems.map((n) => n.path)).toEqual(['/', '/expenses', '/analytics', '/receipts'])
+    expect(navItems.map((n) => n.path)).toEqual(['/dashboard', '/expenses', '/analytics', '/receipts', '/categories'])
   })
 
   it('has correct labels in order', () => {
-    expect(navItems.map((n) => n.label)).toEqual(['Dashboard', 'Expenses', 'Analytics', 'Receipts'])
+    expect(navItems.map((n) => n.label)).toEqual(['Dashboard', 'Expenses', 'Analytics', 'Receipts', 'Categories'])
   })
 
   it('each icon is a valid React component (function or class)', () => {

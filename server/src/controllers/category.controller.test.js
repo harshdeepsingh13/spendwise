@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { listCategories, createCategory, deleteCategory } from './category.controller.js'
+import { listCategories, createCategory, updateCategory, deleteCategory } from './category.controller.js'
 
 vi.mock('../services/category.service.js', () => ({
   listCategories: vi.fn(),
   createCategory: vi.fn(),
+  updateCategory: vi.fn(),
   deleteCategory: vi.fn(),
 }))
 
@@ -83,6 +84,37 @@ describe('createCategory', () => {
     const next = vi.fn()
 
     await createCategory(req, res, next)
+
+    expect(next).toHaveBeenCalledWith(err)
+    expect(res.json).not.toHaveBeenCalled()
+  })
+})
+
+describe('updateCategory', () => {
+  it('responds with the updated category', async () => {
+    const updated = { _id: 'cat1', name: 'Renamed', color: '#fff' }
+    categoryService.updateCategory.mockResolvedValue(updated)
+
+    const req = makeReq({ params: { id: 'cat1' }, body: { name: 'Renamed', color: '#fff' } })
+    const res = makeRes()
+    const next = vi.fn()
+
+    await updateCategory(req, res, next)
+
+    expect(categoryService.updateCategory).toHaveBeenCalledWith('cat1', req.body, 'user123')
+    expect(res.json).toHaveBeenCalledWith(updated)
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  it('passes error to next on service failure', async () => {
+    const err = Object.assign(new Error('Forbidden'), { status: 403 })
+    categoryService.updateCategory.mockRejectedValue(err)
+
+    const req = makeReq({ params: { id: 'cat1' }, body: { name: 'X' } })
+    const res = makeRes()
+    const next = vi.fn()
+
+    await updateCategory(req, res, next)
 
     expect(next).toHaveBeenCalledWith(err)
     expect(res.json).not.toHaveBeenCalled()
