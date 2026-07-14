@@ -1,5 +1,5 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { Box, Button, Card, CardContent, Typography } from '@mui/material'
+import { Box, Card, CardContent, Typography } from '@mui/material'
 
 export const ProGate = ({ locked, children }) => {
   if (!locked) return children
@@ -29,9 +29,6 @@ export const ProGate = ({ locked, children }) => {
                 Upgrade to Pro to unlock full history and advanced analytics
               </Typography>
             </Box>
-            <Button variant="contained" color="secondary" size="small" sx={{ mt: 0.5 }}>
-              Upgrade to Pro
-            </Button>
           </CardContent>
         </Card>
       </Box>

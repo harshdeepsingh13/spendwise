@@ -1,9 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ThemeProvider } from '@mui/material/styles'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { ScannerDialog } from './ScannerDialog'
-import { theme } from '../../theme/theme'
+import { createTestWrapper } from '../../test/renderWithProviders'
 
 vi.mock('react-webcam', () => ({
   default: vi.fn(() => <div data-testid="webcam" />)
@@ -28,12 +27,14 @@ vi.mock('../../hooks/useReceipt', () => ({
   useUpdateReceipt: vi.fn()
 }))
 
+vi.mock('../../hooks/useCategories', () => ({
+  useCategories: () => ({ data: [], isLoading: false })
+}))
+
 import { useCvReady } from '../../hooks/useCvReady'
 import { useReceiptUpload, useOcrStatus, useUpdateReceipt } from '../../hooks/useReceipt'
 
-const wrapper = ({ children }) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
-)
+const wrapper = createTestWrapper()
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -239,7 +240,7 @@ describe('ScannerDialog — file upload flow', () => {
     })
   })
 
-  it('calls onClose after saving receipt successfully', async () => {
+  it('advances to the Log Expense step after saving the receipt, then closes on Skip', async () => {
     const onClose = vi.fn()
     render(<ScannerDialog open onClose={onClose} />, { wrapper })
     const file = new File(['pdf'], 'receipt.pdf', { type: 'application/pdf' })
@@ -248,6 +249,9 @@ describe('ScannerDialog — file upload flow', () => {
       expect(screen.getByRole('button', { name: /save receipt/i })).not.toBeDisabled()
     })
     await userEvent.click(screen.getByRole('button', { name: /save receipt/i }))
+    // Saving the receipt advances to the expense-logging step rather than closing
+    await waitFor(() => expect(screen.getByRole('button', { name: /log expense/i })).toBeInTheDocument())
+    await userEvent.click(screen.getByRole('button', { name: /skip/i }))
     await waitFor(() => expect(onClose).toHaveBeenCalledOnce())
   })
 })

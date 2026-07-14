@@ -41,15 +41,6 @@ describe('ProGate', () => {
     ).toBeInTheDocument()
   })
 
-  it('shows Upgrade to Pro button when locked', () => {
-    render(
-      <ProGate locked={true}>
-        <span>content</span>
-      </ProGate>
-    )
-    expect(screen.getByRole('button', { name: /upgrade to pro/i })).toBeInTheDocument()
-  })
-
   it('does not show overlay when locked is false', () => {
     render(
       <ProGate locked={false}>

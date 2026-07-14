@@ -3,6 +3,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest'
 describe('api axios instance', () => {
   let mockInstance
   let createSpy
+  let mockPost
 
   beforeEach(() => {
     vi.resetModules()
@@ -16,9 +17,11 @@ describe('api axios instance', () => {
     }
 
     createSpy = vi.fn(() => mockInstance)
+    // The 401 interceptor calls the bare `axios.post('/api/auth/refresh')` for a silent refresh
+    mockPost = vi.fn()
 
     vi.doMock('axios', () => ({
-      default: { create: createSpy }
+      default: { create: createSpy, post: mockPost }
     }))
   })
 
@@ -71,28 +74,40 @@ describe('api axios instance', () => {
       expect(successFn(response)).toBe(response)
     })
 
-    it('removes token from localStorage on 401', async () => {
-      localStorage.setItem('token', 'valid-token')
+    it('attempts a silent token refresh on 401', async () => {
       vi.stubGlobal('location', { href: '' })
+      mockPost.mockRejectedValue(new Error('refresh failed'))
       await import('./axios.js')
       const errorFn = mockInstance.interceptors.response.use.mock.calls[0][1]
-      await errorFn({ response: { status: 401 } }).catch(() => {})
+      await errorFn({ response: { status: 401 }, config: { headers: {} } }).catch(() => {})
+      expect(mockPost).toHaveBeenCalledWith('/api/auth/refresh', {}, { withCredentials: true })
+    })
+
+    it('removes token from localStorage when the refresh fails', async () => {
+      localStorage.setItem('token', 'valid-token')
+      vi.stubGlobal('location', { href: '' })
+      mockPost.mockRejectedValue(new Error('refresh failed'))
+      await import('./axios.js')
+      const errorFn = mockInstance.interceptors.response.use.mock.calls[0][1]
+      await errorFn({ response: { status: 401 }, config: { headers: {} } }).catch(() => {})
       expect(localStorage.getItem('token')).toBeNull()
     })
 
-    it('redirects to /?auth=login on 401', async () => {
+    it('redirects to /?auth=login when the refresh fails', async () => {
       vi.stubGlobal('location', { href: '' })
+      mockPost.mockRejectedValue(new Error('refresh failed'))
       await import('./axios.js')
       const errorFn = mockInstance.interceptors.response.use.mock.calls[0][1]
-      await errorFn({ response: { status: 401 } }).catch(() => {})
+      await errorFn({ response: { status: 401 }, config: { headers: {} } }).catch(() => {})
       expect(window.location.href).toBe('/?auth=login')
     })
 
-    it('rejects with the original error on 401', async () => {
+    it('rejects with the original error after a failed 401 refresh', async () => {
       vi.stubGlobal('location', { href: '' })
+      mockPost.mockRejectedValue(new Error('refresh failed'))
       await import('./axios.js')
       const errorFn = mockInstance.interceptors.response.use.mock.calls[0][1]
-      const error = { response: { status: 401 } }
+      const error = { response: { status: 401 }, config: { headers: {} } }
       await expect(errorFn(error)).rejects.toBe(error)
     })
 

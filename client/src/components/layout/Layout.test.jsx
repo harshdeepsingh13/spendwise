@@ -42,7 +42,7 @@ describe('Layout', () => {
   })
 
   it('shows Home as plain text (not link) on home route', () => {
-    renderLayout('/')
+    renderLayout('/dashboard')
     expect(screen.getByText('Home')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Home' })).not.toBeInTheDocument()
   })

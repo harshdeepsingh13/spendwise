@@ -10,6 +10,14 @@ vi.mock('react-router-dom', async () => {
   return { ...actual, useNavigate: () => mockNavigate }
 })
 
+vi.mock('../../hooks/useAuth', () => ({
+  useAuth: () => ({ user: { displayName: 'Test User', email: 'test@example.com' } }),
+}))
+
+vi.mock('../mfa/SecuritySettingsModal', () => ({
+  SecuritySettingsModal: () => null,
+}))
+
 function renderHeader(props = {}, { initialEntries = ['/'] } = {}) {
   const defaults = { onMenuClick: vi.fn(), onLogout: vi.fn() }
   return render(

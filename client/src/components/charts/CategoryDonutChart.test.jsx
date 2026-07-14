@@ -15,6 +15,7 @@ vi.mock('recharts', () => ({
     </div>
   ),
   Cell: () => null,
+  Label: () => null,
   Tooltip: () => null,
   Legend: ({ formatter }) => (
     <div data-testid="legend">{formatter ? formatter('Category') : null}</div>

@@ -8,6 +8,11 @@ vi.mock('@react-three/fiber', () => ({
   useFrame: vi.fn(),
 }))
 
+// drei's <Html> calls useThree, which only works inside a real Canvas; passthrough it
+vi.mock('@react-three/drei', () => ({
+  Html: ({ children }) => <div>{children}</div>,
+}))
+
 // Mock Three.js mesh/geometry internals used inside Canvas children
 vi.mock('three', () => {
   const mockObject3D = {

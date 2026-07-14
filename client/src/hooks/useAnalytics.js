@@ -9,22 +9,6 @@ export const useDashboard = () => {
   })
 }
 
-export const useMonthlyAnalytics = (year, month) => {
-  return useQuery({
-    queryKey: queryKeys.analytics.monthly(year, month),
-    queryFn: () => analyticsService.getMonthly(year, month),
-    enabled: !!year && !!month
-  })
-}
-
-export const useYearlyAnalytics = (year) => {
-  return useQuery({
-    queryKey: queryKeys.analytics.yearly(year),
-    queryFn: () => analyticsService.getYearly(year),
-    enabled: !!year
-  })
-}
-
 export const useSummary = (startDate, endDate, groupBy = 'category') => {
   return useQuery({
     queryKey: queryKeys.analytics.summary(startDate, endDate, groupBy),
