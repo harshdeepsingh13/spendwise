@@ -8,12 +8,14 @@ const CustomTooltip = ({ active, payload }) => {
   const { name, value } = payload[0]
   return (
     <Box sx={{ bgcolor: 'background.elevated', border: '1px solid', borderColor: 'divider', borderRadius: 2, px: 1.5, py: 1 }}>
-      <Typography variant="caption" color="text.secondary">{name}</Typography>
+      <Typography variant="caption" sx={{
+        color: "text.secondary"
+      }}>{name}</Typography>
       <Typography variant="body2" sx={{ color: 'custom.amountGold', fontWeight: 600 }}>
         ${value.toFixed(2)}
       </Typography>
     </Box>
-  )
+  );
 }
 
 const CenterLabel = ({ viewBox, grandTotal }) => {
@@ -40,9 +42,11 @@ export const CategoryDonutChart = ({ data = [], grandTotal = 0, height = 280 }) 
   if (!chartData.length) {
     return (
       <Box sx={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography color="text.secondary" variant="body2">No expenses this period</Typography>
+        <Typography variant="body2" sx={{
+          color: "text.secondary"
+        }}>No expenses this period</Typography>
       </Box>
-    )
+    );
   }
 
   return (

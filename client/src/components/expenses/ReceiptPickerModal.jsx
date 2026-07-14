@@ -19,7 +19,13 @@ export const ReceiptPickerModal = ({ open, onClose, onSelect, currentReceiptId }
           <CircularProgress />
         </Box>
       ) : receipts.length === 0 ? (
-        <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            py: 2,
+            textAlign: "center"
+          }}>
           No receipts found. Scan a receipt first.
         </Typography>
       ) : (

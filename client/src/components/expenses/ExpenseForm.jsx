@@ -107,7 +107,12 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
         onClose={onClose}
         title={isEdit ? "Edit Expense" : "Add Expense"}
         actions={
-          <Stack direction="row" justifyContent="space-between" width="100%">
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-between",
+              width: "100%"
+            }}>
             <Box>
               {isEdit && (
                 <Button
@@ -121,7 +126,9 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
                 </Button>
               )}
             </Box>
-            <Stack direction="row" gap={1}>
+            <Stack direction="row" sx={{
+              gap: 1
+            }}>
               <Button onClick={onClose} disabled={isBusy} color="inherit">
                 Cancel
               </Button>
@@ -139,12 +146,14 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
         <TextField
           label="Amount"
           type="number"
-          inputProps={{ min: 0, step: "0.01" }}
           value={values.amount}
           onChange={set("amount")}
           fullWidth
           required
           autoFocus={!isEdit}
+          slotProps={{
+            htmlInput: { min: 0, step: "0.01" }
+          }}
         />
 
         <FormControl fullWidth required>
@@ -152,7 +161,12 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
           <Select value={values.categoryId} onChange={set("categoryId")} label="Category">
             {categories.map((cat) => (
               <MenuItem key={cat._id} value={cat._id}>
-                <Stack direction="row" alignItems="center" gap={1}>
+                <Stack
+                  direction="row"
+                  sx={{
+                    alignItems: "center",
+                    gap: 1
+                  }}>
                   {cat.color && (
                     <Box
                       component="span"
@@ -184,7 +198,13 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
         />
 
         <Box>
-          <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: "text.secondary",
+              mb: 0.5,
+              display: "block"
+            }}>
             Receipt
           </Typography>
           {receiptLabel ? (
@@ -210,7 +230,6 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
           )}
         </Box>
       </AppModal>
-
       <ReceiptPickerModal
         open={pickerOpen}
         onClose={() => setPickerOpen(false)}

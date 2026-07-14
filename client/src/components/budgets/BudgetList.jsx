@@ -7,27 +7,45 @@ export const BudgetList = ({ onEdit }) => {
 
   if (isLoading) {
     return (
-      <Stack gap={1.5}>
+      <Stack sx={{
+        gap: 1.5
+      }}>
         {[1, 2, 3].map(i => <Skeleton key={i} variant="rounded" height={52} />)}
       </Stack>
-    )
+    );
   }
 
   if (!budgets.length) {
     return (
-      <Typography variant="body2" color="text.secondary" sx={{ py: 1 }}>
-        No budgets set. Add one to track spending against your goals.
-      </Typography>
-    )
+      <Typography
+        variant="body2"
+        sx={{
+          color: "text.secondary",
+          py: 1
+        }}>No budgets set. Add one to track spending against your goals.
+              </Typography>
+    );
   }
 
   return (
-    <Stack gap={1}>
+    <Stack sx={{
+      gap: 1
+    }}>
       {budgets.map(budget => (
         <Card key={budget._id} variant="outlined" sx={{ bgcolor: 'background.elevated' }}>
           <CardContent sx={{ py: '12px !important', px: 2 }}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Stack direction="row" alignItems="center" gap={1}>
+            <Stack
+              direction="row"
+              sx={{
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}>
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: "center",
+                  gap: 1
+                }}>
                 {budget.category?.color && (
                   <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: budget.category.color, flexShrink: 0 }} />
                 )}
@@ -40,7 +58,12 @@ export const BudgetList = ({ onEdit }) => {
                   sx={{ height: 16, fontSize: '0.62rem', opacity: 0.6 }}
                 />
               </Stack>
-              <Stack direction="row" alignItems="center" gap={1}>
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: "center",
+                  gap: 1
+                }}>
                 <Typography variant="body2" sx={{ color: 'custom.amountGold', fontWeight: 600 }}>
                   ${parseFloat(budget.amount).toFixed(2)}/mo
                 </Typography>
@@ -57,5 +80,5 @@ export const BudgetList = ({ onEdit }) => {
         </Card>
       ))}
     </Stack>
-  )
+  );
 }

@@ -78,7 +78,13 @@ const MomIcon = ({ pct }) => {
 const KpiCard = ({ label, value, subValue, isLoading, valueColor, accentColor = 'primary.main' }) => (
   <Card sx={{ height: '100%', borderTop: '3px solid', borderColor: accentColor }}>
     <CardContent>
-      <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+      <Typography
+        variant="overline"
+        sx={{
+          color: "text.secondary",
+          display: 'block',
+          mb: 0.5
+        }}>
         {label}
       </Typography>
       {isLoading ? (
@@ -89,7 +95,9 @@ const KpiCard = ({ label, value, subValue, isLoading, valueColor, accentColor = 
         </Typography>
       )}
       {subValue && (
-        <Typography variant="caption" color="text.secondary">{subValue}</Typography>
+        <Typography variant="caption" sx={{
+          color: "text.secondary"
+        }}>{subValue}</Typography>
       )}
     </CardContent>
   </Card>
@@ -157,8 +165,12 @@ export default function AnalyticsPage() {
         gap: 1.5,
       }}>
         <Box>
-          <Typography variant="h5" fontWeight={700}>Analytics</Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="h5" sx={{
+            fontWeight: 700
+          }}>Analytics</Typography>
+          <Typography variant="caption" sx={{
+            color: "text.secondary"
+          }}>
             {now.format('MMMM YYYY')}
           </Typography>
         </Box>
@@ -174,7 +186,9 @@ export default function AnalyticsPage() {
             gap: 1.5,
             flexShrink: 0,
           }}>
-            <Typography variant="caption" color="text.secondary">Month total</Typography>
+            <Typography variant="caption" sx={{
+              color: "text.secondary"
+            }}>Month total</Typography>
             <Typography
               variant="h6"
               sx={{ color: 'custom.amountGold', fontVariantNumeric: 'tabular-nums', fontWeight: 700 }}
@@ -184,10 +198,14 @@ export default function AnalyticsPage() {
           </Box>
         )}
       </Box>
-
       {/* KPI Cards */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 6,
+            md: 3
+          }}>
           <KpiCard
             label="This Month"
             value={kpi ? `$${kpi.currentMonthTotal.toFixed(0)}` : null}
@@ -196,7 +214,12 @@ export default function AnalyticsPage() {
             accentColor="custom.amountGold"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 6,
+            md: 3
+          }}>
           <KpiCard
             label="vs Last Month"
             isLoading={kpiLoading}
@@ -217,7 +240,12 @@ export default function AnalyticsPage() {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 6,
+            md: 3
+          }}>
           <KpiCard
             label="Top Category"
             isLoading={kpiLoading}
@@ -226,7 +254,12 @@ export default function AnalyticsPage() {
             accentColor="primary.main"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 6,
+            md: 3
+          }}>
           <KpiCard
             label="Budget Health"
             isLoading={kpiLoading}
@@ -243,11 +276,14 @@ export default function AnalyticsPage() {
           />
         </Grid>
       </Grid>
-
       {/* Charts: Spending Trend + Category Breakdown side by side on desktop */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {/* Spending Trend */}
-        <Grid item xs={12} md={7}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 7
+          }}>
           <Card sx={{ height: '100%' }}>
             <CardHeader
               title={
@@ -287,7 +323,11 @@ export default function AnalyticsPage() {
         </Grid>
 
         {/* Category Breakdown */}
-        <Grid item xs={12} md={5}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 5
+          }}>
           <Card sx={{ height: '100%' }}>
             <CardHeader
               title={
@@ -308,7 +348,6 @@ export default function AnalyticsPage() {
           </Card>
         </Grid>
       </Grid>
-
       {/* Budget Tracker */}
       <Card sx={{ mb: 3 }}>
         <CardHeader
@@ -326,12 +365,19 @@ export default function AnalyticsPage() {
         />
         <CardContent sx={{ pt: 1 }}>
           {budgetLoading ? (
-            <Stack gap={2}>
+            <Stack sx={{
+              gap: 2
+            }}>
               {[1, 2, 3].map(i => <Skeleton key={i} variant="rounded" height={48} />)}
             </Stack>
           ) : budgetVsActual.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 3 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "text.secondary",
+                  mb: 2
+                }}>
                 No budgets set yet. Set monthly limits to track your spending.
               </Typography>
               <Button
@@ -367,7 +413,6 @@ export default function AnalyticsPage() {
           )}
         </CardContent>
       </Card>
-
       {/* Manage Budgets Modal */}
       <AppModal
         open={manageBudgetsOpen}
@@ -386,7 +431,6 @@ export default function AnalyticsPage() {
       >
         <BudgetList onEdit={handleEditBudget} />
       </AppModal>
-
       {/* Budget Form Modal */}
       <BudgetForm
         open={budgetFormOpen}
@@ -394,5 +438,5 @@ export default function AnalyticsPage() {
         budget={editingBudget}
       />
     </PageContainer>
-  )
+  );
 }

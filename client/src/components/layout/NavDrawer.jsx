@@ -61,7 +61,7 @@ export default function NavDrawer({ open, onClose }) {
               </ListItemIcon>
               <ListItemText
                 primary={label}
-                primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: active ? 600 : 400 }}
+                slotProps={{ primary: { fontSize: '0.9rem', fontWeight: active ? 600 : 400 } }}
               />
             </ListItemButton>
           )

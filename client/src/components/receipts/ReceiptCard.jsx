@@ -1,6 +1,6 @@
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined'
 import { Box, Card, CardMedia, Chip, IconButton, Typography, useTheme } from '@mui/material'
 import dayjs from 'dayjs'
 import { useState } from 'react'
@@ -9,7 +9,7 @@ import { ReceiptEditDialog } from './ReceiptEditDialog'
 
 const getThumbnailUrl = (receipt) => {
   if (receipt.fileType !== 'pdf') return receipt.cloudinaryUrl
-  return receipt.cloudinaryUrl.replace(/\.pdf$/i, '.jpg')
+  return receipt.cloudinaryUrl.replace(/\.pdf$/i, '.jpg');
 }
 
 const STATUS_COLOR = {
@@ -80,7 +80,9 @@ export const ReceiptCard = ({ receipt, onTagClick, existingTags = [], selectionM
 
         <Box sx={{ flex: 1, p: 1.5, minWidth: 0 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{
+              color: "text.secondary"
+            }}>
               {dayjs(receipt.createdAt).format('MMM D, YYYY')}
             </Typography>
             <Chip
@@ -92,13 +94,26 @@ export const ReceiptCard = ({ receipt, onTagClick, existingTags = [], selectionM
           </Box>
 
           {receipt.name && (
-            <Typography variant="caption" color="text.secondary" noWrap sx={{ display: 'block', mb: 0.25 }}>
+            <Typography
+              variant="caption"
+              noWrap
+              sx={{
+                color: "text.secondary",
+                display: 'block',
+                mb: 0.25
+              }}>
               {receipt.name}
             </Typography>
           )}
 
           {receipt.ocrExtractedAmount && (
-            <Typography variant="subtitle1" fontWeight={700} sx={{ color: 'custom.amountGold', lineHeight: 1.2 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 700,
+                color: 'custom.amountGold',
+                lineHeight: 1.2
+              }}>
               ${parseFloat(receipt.ocrExtractedAmount).toFixed(2)}
             </Typography>
           )}
@@ -135,7 +150,6 @@ export const ReceiptCard = ({ receipt, onTagClick, existingTags = [], selectionM
           )}
         </Box>
       </Card>
-
       {!selectionMode && (
         <ReceiptEditDialog
           open={editOpen}
@@ -145,5 +159,5 @@ export const ReceiptCard = ({ receipt, onTagClick, existingTags = [], selectionM
         />
       )}
     </>
-  )
+  );
 }

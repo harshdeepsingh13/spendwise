@@ -47,7 +47,9 @@ export function MfaDisableDialog({ open, onClose, onSuccess }) {
       }
     >
       {error && <Alert severity="error">{error}</Alert>}
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" sx={{
+        color: "text.secondary"
+      }}>
         Enter your current authenticator code to confirm disabling MFA.
       </Typography>
       <TextField
@@ -55,10 +57,12 @@ export function MfaDisableDialog({ open, onClose, onSuccess }) {
         value={totpCode}
         onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
         fullWidth
-        inputProps={{ inputMode: 'numeric', maxLength: 6 }}
         placeholder="000000"
         autoFocus
+        slotProps={{
+          htmlInput: { inputMode: 'numeric', maxLength: 6 }
+        }}
       />
     </AppModal>
-  )
+  );
 }

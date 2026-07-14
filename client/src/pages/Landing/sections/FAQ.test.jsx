@@ -62,7 +62,7 @@ describe('FAQ', () => {
     const questionText = screen.getByText('Is Spendwise really free to use?')
     await user.click(questionText)
 
-    const accordionBtn = questionText.closest('[role="button"]')
+    const accordionBtn = questionText.closest('button')
     expect(accordionBtn).toHaveAttribute('aria-expanded', 'true')
   })
 
@@ -74,7 +74,7 @@ describe('FAQ', () => {
     await user.click(questionText)
     await user.click(questionText)
 
-    const accordionBtn = questionText.closest('[role="button"]')
+    const accordionBtn = questionText.closest('button')
     expect(accordionBtn).toHaveAttribute('aria-expanded', 'false')
   })
 

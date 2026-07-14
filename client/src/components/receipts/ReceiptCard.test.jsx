@@ -103,7 +103,7 @@ describe('ReceiptCard', () => {
     const mutate = vi.fn()
     useDeleteReceipt.mockReturnValue({ mutate, isPending: false })
     render(<ReceiptCard receipt={mockReceipt} />, { wrapper })
-    const deleteBtn = screen.getByTestId('DeleteOutlineIcon').closest('button')
+    const deleteBtn = screen.getByTestId('DeleteOutlinedIcon').closest('button')
     await userEvent.click(deleteBtn)
     expect(mutate).toHaveBeenCalledWith('receipt-1')
   })
@@ -111,7 +111,7 @@ describe('ReceiptCard', () => {
   it('disables delete button while deleting is in progress', () => {
     useDeleteReceipt.mockReturnValue({ mutate: vi.fn(), isPending: true })
     render(<ReceiptCard receipt={mockReceipt} />, { wrapper })
-    const deleteBtn = screen.getByTestId('DeleteOutlineIcon').closest('button')
+    const deleteBtn = screen.getByTestId('DeleteOutlinedIcon').closest('button')
     expect(deleteBtn).toBeDisabled()
   })
 
@@ -127,7 +127,7 @@ describe('ReceiptCard', () => {
 
   it('stopPropagation is called on delete button click', () => {
     render(<ReceiptCard receipt={mockReceipt} />, { wrapper })
-    const deleteBtn = screen.getByTestId('DeleteOutlineIcon').closest('button')
+    const deleteBtn = screen.getByTestId('DeleteOutlinedIcon').closest('button')
     const clickEvent = new MouseEvent('click', { bubbles: true })
     const stopPropSpy = vi.spyOn(clickEvent, 'stopPropagation')
     fireEvent(deleteBtn, clickEvent)
@@ -165,7 +165,7 @@ describe('ReceiptCard', () => {
   describe('selectionMode', () => {
     it('shows checkbox icon instead of delete button in selection mode', () => {
       render(<ReceiptCard receipt={mockReceipt} selectionMode />, { wrapper })
-      expect(screen.queryByTestId('DeleteOutlineIcon')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('DeleteOutlinedIcon')).not.toBeInTheDocument()
       expect(screen.getByTestId('CheckBoxOutlineBlankIcon')).toBeInTheDocument()
     })
 

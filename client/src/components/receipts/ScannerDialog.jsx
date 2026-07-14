@@ -68,10 +68,14 @@ const OcrStep = ({ source, existingTags, onSaved, onRetake }) => {
         >
           <PictureAsPdfIcon sx={{ color: "error.light", fontSize: 36 }} />
           <Box>
-            <Typography variant="body2" fontWeight={600} noWrap>
+            <Typography variant="body2" noWrap sx={{
+              fontWeight: 600
+            }}>
               {source.file.name}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{
+              color: "text.secondary"
+            }}>
               {(source.file.size / 1024).toFixed(1)} KB · PDF · Page 1 will be scanned
             </Typography>
           </Box>
@@ -84,12 +88,13 @@ const OcrStep = ({ source, existingTags, onSaved, onRetake }) => {
           sx={{ width: "100%", maxHeight: 260, objectFit: "contain", borderRadius: 1 }}
         />
       )}
-
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, minHeight: 28 }}>
         {isUploading && (
           <>
             <CircularProgress size={14} sx={{ color: "custom.aiPurple" }} />
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{
+              color: "text.secondary"
+            }}>
               Uploading…
             </Typography>
           </>
@@ -105,18 +110,21 @@ const OcrStep = ({ source, existingTags, onSaved, onRetake }) => {
         {ocrData?.ocrStatus === "done" && (
           <>
             <CheckCircleIcon fontSize="small" color="success" />
-            <Typography variant="caption" color="success.main">
+            <Typography variant="caption" sx={{
+              color: "success.main"
+            }}>
               Amount detected
             </Typography>
           </>
         )}
         {ocrData?.ocrStatus === "failed" && (
-          <Typography variant="caption" color="error.main">
+          <Typography variant="caption" sx={{
+            color: "error.main"
+          }}>
             Could not detect amount — enter manually
           </Typography>
         )}
       </Box>
-
       <ReceiptDetailsForm
         name={name}
         onNameChange={setName}
@@ -126,7 +134,6 @@ const OcrStep = ({ source, existingTags, onSaved, onRetake }) => {
         onTagsChange={setTags}
         existingTags={existingTags}
       />
-
       <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
         <Button onClick={onRetake} disabled={isSaving}>
           Retake
@@ -162,27 +169,34 @@ const ExpenseStep = ({ receiptId, prefilledAmount, onDone, onSkip }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" sx={{
+        color: "text.secondary"
+      }}>
         Log this as an expense? The receipt will be linked automatically.
       </Typography>
-
       <TextField
         label="Amount"
         type="number"
-        inputProps={{ min: 0, step: "0.01" }}
         value={values.amount}
         onChange={set("amount")}
         fullWidth
         required
         autoFocus
+        slotProps={{
+          htmlInput: { min: 0, step: "0.01" }
+        }}
       />
-
       <FormControl fullWidth required>
         <InputLabel>Category</InputLabel>
         <Select value={values.categoryId} onChange={set("categoryId")} label="Category">
           {categories.map((cat) => (
             <MenuItem key={cat._id} value={cat._id}>
-              <Stack direction="row" alignItems="center" gap={1}>
+              <Stack
+                direction="row"
+                sx={{
+                  alignItems: "center",
+                  gap: 1
+                }}>
                 {cat.color && (
                   <Box component="span" sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: cat.color, display: "inline-block", flexShrink: 0 }} />
                 )}
@@ -192,14 +206,12 @@ const ExpenseStep = ({ receiptId, prefilledAmount, onDone, onSkip }) => {
           ))}
         </Select>
       </FormControl>
-
       <CustomDatePicker
         label="Date"
         value={values.date}
         onChange={(date) => setValues((prev) => ({ ...prev, date }))}
         margin="dense"
       />
-
       <TextField
         label="Notes"
         value={values.notes}
@@ -209,8 +221,9 @@ const ExpenseStep = ({ receiptId, prefilledAmount, onDone, onSkip }) => {
         minRows={2}
         placeholder="Optional"
       />
-
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" sx={{
+        justifyContent: "space-between"
+      }}>
         <Button onClick={onSkip} color="inherit">
           Skip
         </Button>
@@ -348,12 +361,13 @@ const CameraStep = ({ onCaptured }) => {
       {!cvReady && (
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6, gap: 2 }}>
           <CircularProgress sx={{ color: "custom.aiPurple" }} />
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{
+            color: "text.secondary"
+          }}>
             Loading scanner engine…
           </Typography>
         </Box>
       )}
-
       {cvReady && (
         <Box sx={{ position: "relative", width: "100%", borderRadius: 2, overflow: "hidden" }}>
           <Webcam
@@ -377,7 +391,6 @@ const CameraStep = ({ onCaptured }) => {
           />
         </Box>
       )}
-
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <IconButton
           onClick={() => setFacingMode((m) => (m === "environment" ? "user" : "environment"))}
@@ -401,8 +414,12 @@ const CameraStep = ({ onCaptured }) => {
           {capturing ? <CircularProgress size={24} sx={{ color: "common.white" }} /> : <CameraAltIcon />}
         </IconButton>
       </Box>
-
-      <Typography variant="caption" color="text.secondary" textAlign="center">
+      <Typography
+        variant="caption"
+        sx={{
+          color: "text.secondary",
+          textAlign: "center"
+        }}>
         Point at the receipt — the outline auto-detects
       </Typography>
     </Box>

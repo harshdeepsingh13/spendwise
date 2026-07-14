@@ -29,10 +29,14 @@ const getDateRange = (filter) => {
 const EmptyState = () => (
   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", py: 8, gap: 2 }}>
     <AttachMoneyIcon sx={{ fontSize: 64, opacity: 0.3 }} />
-    <Typography variant="body1" color="text.secondary">
+    <Typography variant="body1" sx={{
+      color: "text.secondary"
+    }}>
       No expenses found
     </Typography>
-    <Typography variant="caption" color="text.secondary">
+    <Typography variant="caption" sx={{
+      color: "text.secondary"
+    }}>
       Tap the + button to log your first expense
     </Typography>
   </Box>
@@ -101,21 +105,29 @@ export default function ExpensesPage() {
   return (
     <PageContainer>
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
-        <Typography variant="h5" fontWeight={700}>
+        <Typography variant="h5" sx={{
+          fontWeight: 700
+        }}>
           Expenses
         </Typography>
         {!isLoading && expenses.length > 0 && (
           <Box sx={{ textAlign: "right" }}>
-            <Typography variant="body2" fontWeight={700} sx={{ color: "custom.amountGold" }}>
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 700,
+                color: "custom.amountGold"
+              }}>
               ${total.toFixed(2)}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{
+              color: "text.secondary"
+            }}>
               {expenses.length} expense{expenses.length !== 1 ? "s" : ""}
             </Typography>
           </Box>
         )}
       </Box>
-
       <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2, flexWrap: "wrap" }}>
         <ToggleButtonGroup value={dateFilter} exclusive onChange={handleDateFilterChange} size="small">
           <ToggleButton value="week">This Week</ToggleButton>
@@ -130,7 +142,6 @@ export default function ExpensesPage() {
           variant={customDateRange ? "filled" : "outlined"}
         />
       </Box>
-
       {uniqueCategories.length > 1 && (
         <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 1, mb: 2, flexWrap: "nowrap" }}>
           {uniqueCategories.map((cat) => (
@@ -150,21 +161,17 @@ export default function ExpensesPage() {
           ))}
         </Box>
       )}
-
       {isLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress />
         </Box>
       )}
-
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           Failed to load expenses
         </Alert>
       )}
-
       {!isLoading && !error && expenses.length === 0 && <EmptyState />}
-
       {!isLoading && !error && expenses.length > 0 && (
         <Stack spacing={1}>
           {expenses.map((expense) => (
@@ -172,13 +179,10 @@ export default function ExpensesPage() {
           ))}
         </Stack>
       )}
-
       <Fab color="primary" onClick={handleOpenCreate} sx={{ position: "fixed", bottom: 20, right: 20 }}>
         <AddIcon />
       </Fab>
-
       <ExpenseForm open={formOpen} onClose={handleFormClose} expense={editingExpense} />
-
       <CustomDateModal
         open={customDateModalOpen}
         onClose={() => setCustomDateModalOpen(false)}

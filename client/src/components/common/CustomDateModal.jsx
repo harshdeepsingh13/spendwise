@@ -41,7 +41,9 @@ export const CustomDateModal = ({ open, onClose, onApply, currentRange }) => {
           <Button onClick={handleReset} color="inherit">
             Reset
           </Button>
-          <Stack direction="row" gap={1}>
+          <Stack direction="row" sx={{
+            gap: 1
+          }}>
             <Button onClick={onClose} color="inherit">
               Cancel
             </Button>
@@ -58,13 +60,13 @@ export const CustomDateModal = ({ open, onClose, onApply, currentRange }) => {
           onChange={(date) => setStartDate(date)}
           margin="dense"
         />
-        <CustomDatePicker
-          label="End Date"
-          value={endDate}
-          onChange={(date) => setEndDate(date)}
-          minDate={startDate}
-          margin="dense"
-        />
+      <CustomDatePicker
+        label="End Date"
+        value={endDate}
+        onChange={(date) => setEndDate(date)}
+        minDate={startDate}
+        margin="dense"
+      />
     </AppModal>
   );
 };

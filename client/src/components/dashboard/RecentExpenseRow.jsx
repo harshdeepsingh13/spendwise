@@ -23,25 +23,43 @@ export const RecentExpenseRow = ({ expense }) => {
           bgcolor: categoryColor || 'text.disabled',
         }} />
         <Box sx={{ minWidth: 0 }}>
-          <Typography variant="body2" fontWeight={500} noWrap>
+          <Typography variant="body2" noWrap sx={{
+            fontWeight: 500
+          }}>
             {expense.category?.name ?? 'Uncategorized'}
           </Typography>
           {expense.notes && (
-            <Typography variant="caption" color="text.secondary" noWrap display="block">
+            <Typography
+              variant="caption"
+              noWrap
+              sx={{
+                color: "text.secondary",
+                display: "block"
+              }}>
               {expense.notes}
             </Typography>
           )}
         </Box>
       </Box>
       <Box sx={{ textAlign: 'right', flexShrink: 0, ml: 2 }}>
-        <Typography variant="body2" fontWeight={700} sx={{ color: 'custom.amountGold' }}>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 700,
+            color: 'custom.amountGold'
+          }}>
           ${amount.toFixed(2)}
         </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
+        <Typography
+          variant="caption"
+          sx={{
+            color: "text.secondary",
+            display: "block"
+          }}>
           {dayjs(expense.date).format('MMM D')}
         </Typography>
       </Box>
     </Box>
-  )
+  );
 }
 

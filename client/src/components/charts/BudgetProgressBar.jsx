@@ -28,7 +28,9 @@ export const BudgetProgressBar = ({ budget, actual, pct, status }) => {
             <Chip label="Near limit" size="small" color="warning" sx={{ height: 18, fontSize: '0.65rem' }} />
           )}
         </Box>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" sx={{
+          color: "text.secondary"
+        }}>
           <Box component="span" sx={{ color: status === 'over' ? 'custom.spendRed' : 'custom.amountGold', fontWeight: 600 }}>
             ${actual.toFixed(0)}
           </Box>
@@ -44,5 +46,5 @@ export const BudgetProgressBar = ({ budget, actual, pct, status }) => {
         } : {}}
       />
     </Box>
-  )
+  );
 }

@@ -112,14 +112,18 @@ export default function Features() {
           Built for people who want clarity over their spending without the spreadsheet headache.
         </Typography>
       </Box>
-
       <Grid container spacing={2.5}>
         {FEATURES.map((feature, i) => (
-          <Grid item xs={12} sm={6} key={feature.title}>
+          <Grid
+            key={feature.title}
+            size={{
+              xs: 12,
+              sm: 6
+            }}>
             <FeatureCard feature={feature} delay={i * 100} />
           </Grid>
         ))}
       </Grid>
     </Box>
-  )
+  );
 }

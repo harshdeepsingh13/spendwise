@@ -124,9 +124,7 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
         <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
           Enter the 6-digit code from your authenticator app
         </Typography>
-
         {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
-
         <Box component="form" onSubmit={handleMfaSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <TextField
             label="Authentication Code"
@@ -134,9 +132,11 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
             onChange={e => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             required
             fullWidth
-            inputProps={{ inputMode: 'numeric', maxLength: 6 }}
             placeholder="000000"
             autoFocus
+            slotProps={{
+              htmlInput: { inputMode: 'numeric', maxLength: 6 }
+            }}
           />
           <Button type="submit" variant="contained" size="large" disabled={loading} fullWidth>
             {loading ? 'Verifying…' : 'Verify →'}
@@ -149,7 +149,7 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
           </Button>
         </Box>
       </AppModal>
-    )
+    );
   }
 
   return (
@@ -162,9 +162,7 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
         <Tab label="Create account" />
         <Tab label="Sign in" />
       </Tabs>
-
       {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
-
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
         <TextField
           label="Email address"
@@ -206,11 +204,11 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
           {loading ? 'Please wait…' : tab === 0 ? 'Create free account →' : 'Sign in →'}
         </Button>
       </Box>
-
       <Divider sx={{ my: 0.5 }}>
-        <Typography variant="caption" color="text.disabled">or continue with</Typography>
+        <Typography variant="caption" sx={{
+          color: "text.disabled"
+        }}>or continue with</Typography>
       </Divider>
-
       <Button
         variant="outlined"
         fullWidth
@@ -228,10 +226,11 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
       >
         Continue with Google
       </Button>
-
-      <Typography variant="caption" color="text.disabled" align="center">
+      <Typography variant="caption" align="center" sx={{
+        color: "text.disabled"
+      }}>
         No credit card required · Free forever
       </Typography>
     </AppModal>
-  )
+  );
 }

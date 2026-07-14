@@ -43,9 +43,16 @@ export const ReceiptThumb = ({ receipt }) => {
           <ImageIcon sx={{ color: 'text.disabled', fontSize: 28 }} />
         )}
       </Box>
-      <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5, textAlign: 'center' }}>
+      <Typography
+        variant="caption"
+        sx={{
+          color: "text.secondary",
+          display: "block",
+          mt: 0.5,
+          textAlign: 'center'
+        }}>
         {dayjs(receipt.createdAt).format('MMM D')}
       </Typography>
     </Box>
-  )
+  );
 }
