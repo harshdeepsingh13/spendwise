@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { User } from '../models/User.model.js'
 import { env } from '../config/env.js'
+import { runDueRecurrencesThrottled } from '../services/recurrence.service.js'
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -20,6 +21,12 @@ export const authMiddleware = async (req, res, next) => {
 
     req.user = user
     next()
+
+    // Materialize any due recurring-expense occurrences. Fire-and-forget and internally
+    // throttled/claimed so it never blocks the response and runs at most once per user per window.
+    runDueRecurrencesThrottled(user._id).catch((err) =>
+      console.error('Recurrence generation failed:', err)
+    )
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' })
   }

@@ -2,7 +2,14 @@ import { vi, describe, it, expect, beforeEach } from 'vitest'
 
 vi.mock('../models/Expense.model.js')
 
+// Keep advanceDate real; spy only on the backfill trigger
+vi.mock('./recurrence.service.js', async (importOriginal) => {
+  const actual = await importOriginal()
+  return { ...actual, generateDueRecurrences: vi.fn().mockResolvedValue(0) }
+})
+
 import { Expense } from '../models/Expense.model.js'
+import { generateDueRecurrences } from './recurrence.service.js'
 import {
   listExpenses,
   getExpense,
@@ -145,6 +152,34 @@ describe('createExpense', () => {
     Expense.mockImplementationOnce(function () { return mockInstance })
 
     await expect(createExpense({}, USER_ID)).rejects.toThrow('Validation failed')
+  })
+
+  it('does not backfill for a non-recurring expense', async () => {
+    Expense.mockImplementationOnce(function () { return makeExpense() })
+    await createExpense({ amount: 10, category: 'food', date: new Date() }, USER_ID)
+    expect(generateDueRecurrences).not.toHaveBeenCalled()
+  })
+
+  it('schedules and backfills a past-dated recurring template', async () => {
+    const past = new Date(Date.now() - 40 * 24 * 60 * 60 * 1000)
+    const mockInstance = makeExpense({ isRecurring: true, frequency: 'monthly', date: past })
+    Expense.mockImplementationOnce(function () { return mockInstance })
+
+    await createExpense({ isRecurring: true, frequency: 'monthly', date: past }, USER_ID)
+
+    // nextRunAt = start + 1 month, still in the past → due → backfill runs
+    expect(mockInstance.nextRunAt).toBeInstanceOf(Date)
+    expect(mockInstance.nextRunAt.getTime()).toBeLessThanOrEqual(Date.now())
+    expect(generateDueRecurrences).toHaveBeenCalledWith(USER_ID)
+  })
+
+  it('does not backfill a future-dated recurring template', async () => {
+    const mockInstance = makeExpense({ isRecurring: true, frequency: 'monthly', date: new Date() })
+    Expense.mockImplementationOnce(function () { return mockInstance })
+
+    await createExpense({ isRecurring: true, frequency: 'monthly', date: new Date() }, USER_ID)
+
+    expect(generateDueRecurrences).not.toHaveBeenCalled()
   })
 })
 

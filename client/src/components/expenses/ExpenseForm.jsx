@@ -7,10 +7,12 @@ import {
   Chip,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -22,7 +24,7 @@ import { ReceiptPickerModal } from "./ReceiptPickerModal";
 import { useCategories } from "../../hooks/useCategories";
 import { useExpenseMutations } from "../../hooks/useExpenseMutations";
 
-const EMPTY_FORM = { amount: "", categoryId: "", date: dayjs(), notes: "", linkedReceiptId: null, linkedReceipt: null };
+const EMPTY_FORM = { amount: "", categoryId: "", date: dayjs(), notes: "", linkedReceiptId: null, linkedReceipt: null, isRecurring: false, frequency: "monthly" };
 
 const toFormValues = (expense) => ({
   amount: expense.amount ?? "",
@@ -31,6 +33,8 @@ const toFormValues = (expense) => ({
   notes: expense.notes ?? "",
   linkedReceiptId: expense.receiptId ?? null,
   linkedReceipt: null,
+  isRecurring: expense.isRecurring ?? false,
+  frequency: expense.frequency ?? "monthly",
 });
 
 export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialAmount }) => {
@@ -79,6 +83,8 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
       date: values.date.toISOString(),
       notes: values.notes || undefined,
       receipt: values.linkedReceiptId || undefined,
+      isRecurring: values.isRecurring,
+      frequency: values.isRecurring ? values.frequency : undefined,
     };
     if (isEdit) {
       await update.mutateAsync({ id: expense.id, data: payload });
@@ -182,6 +188,34 @@ export const ExpenseForm = ({ open, onClose, expense, initialReceiptId, initialA
           minRows={2}
           placeholder="Optional"
         />
+
+        <Box>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={values.isRecurring}
+                onChange={(e) => setValues((prev) => ({ ...prev, isRecurring: e.target.checked }))}
+              />
+            }
+            label="Recurring expense"
+          />
+          {values.isRecurring && (
+            <>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <InputLabel>Frequency</InputLabel>
+                <Select value={values.frequency} onChange={set("frequency")} label="Frequency">
+                  <MenuItem value="daily">Daily</MenuItem>
+                  <MenuItem value="weekly">Weekly</MenuItem>
+                  <MenuItem value="monthly">Monthly</MenuItem>
+                  <MenuItem value="yearly">Yearly</MenuItem>
+                </Select>
+              </FormControl>
+              <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
+                Future occurrences are added automatically. Turn this off to stop the series.
+              </Typography>
+            </>
+          )}
+        </Box>
 
         <Box>
           <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>

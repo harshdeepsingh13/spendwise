@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { Box, Chip, Typography } from "@mui/material";
 import dayjs from "@/lib/dayjs";
 
 export const ExpenseRow = ({ expense, onEdit }) => {
@@ -34,9 +35,20 @@ export const ExpenseRow = ({ expense, onEdit }) => {
           }}
         />
         <Box sx={{ minWidth: 0 }}>
-          <Typography variant="body2" fontWeight={600} noWrap>
-            {expense.category?.name ?? "Uncategorized"}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, minWidth: 0 }}>
+            <Typography variant="body2" fontWeight={600} noWrap>
+              {expense.category?.name ?? "Uncategorized"}
+            </Typography>
+            {expense.isRecurring && (
+              <Chip
+                icon={<AutorenewIcon sx={{ fontSize: 13 }} />}
+                label={expense.frequency ?? "recurring"}
+                size="small"
+                variant="outlined"
+                sx={{ height: 18, textTransform: "capitalize", "& .MuiChip-label": { px: 0.5, fontSize: "0.65rem" } }}
+              />
+            )}
+          </Box>
           {expense.notes && (
             <Typography variant="caption" color="text.secondary" noWrap display="block">
               {expense.notes}

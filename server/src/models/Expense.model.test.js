@@ -128,6 +128,61 @@ describe('Expense model schema', () => {
     })
   })
 
+  describe('recurrence fields', () => {
+    const baseRecurring = () => ({
+      user: validObjectId(),
+      category: validObjectId(),
+      amount: mongoose.Types.Decimal128.fromString('10.00'),
+      date: new Date(),
+    })
+
+    it('defaults interval to 1', () => {
+      const doc = new Expense(baseRecurring())
+      expect(doc.interval).toBe(1)
+    })
+
+    it.each(['daily', 'weekly', 'monthly', 'yearly'])(
+      'accepts "%s" as a valid frequency',
+      (frequency) => {
+        const doc = new Expense({ ...baseRecurring(), isRecurring: true, frequency })
+        const err = doc.validateSync()
+        expect(err).toBeUndefined()
+        expect(doc.frequency).toBe(frequency)
+      }
+    )
+
+    it('rejects an invalid frequency enum value', () => {
+      const doc = new Expense({ ...baseRecurring(), isRecurring: true, frequency: 'hourly' })
+      const err = doc.validateSync()
+      expect(err.errors.frequency).toBeDefined()
+    })
+
+    it('does not require frequency for a non-recurring expense', () => {
+      const doc = new Expense(baseRecurring())
+      const err = doc.validateSync()
+      expect(err).toBeUndefined()
+    })
+
+    it('accepts a custom interval', () => {
+      const doc = new Expense({ ...baseRecurring(), interval: 3 })
+      expect(doc.interval).toBe(3)
+    })
+
+    it('accepts nextRunAt as a Date', () => {
+      const nextRunAt = new Date('2026-08-01')
+      const doc = new Expense({ ...baseRecurring(), isRecurring: true, nextRunAt })
+      expect(doc.nextRunAt).toBeInstanceOf(Date)
+      expect(doc.nextRunAt.getTime()).toBe(nextRunAt.getTime())
+    })
+
+    it('accepts recurrenceEndDate as a Date', () => {
+      const recurrenceEndDate = new Date('2026-12-31')
+      const doc = new Expense({ ...baseRecurring(), isRecurring: true, recurrenceEndDate })
+      expect(doc.recurrenceEndDate).toBeInstanceOf(Date)
+      expect(doc.recurrenceEndDate.getTime()).toBe(recurrenceEndDate.getTime())
+    })
+  })
+
   describe('field types', () => {
     it('stores amount as Decimal128', () => {
       const doc = new Expense({
@@ -176,6 +231,25 @@ describe('Expense model schema', () => {
         ([fields]) => fields.user === 1 && fields.category === 1 && fields.date === -1
       )
       expect(hasUserCategoryDate).toBe(true)
+    })
+
+    it('has compound index on user + isRecurring + nextRunAt for due-template lookups', () => {
+      const indexes = Expense.schema.indexes()
+      const hasDueTemplateIndex = indexes.some(
+        ([fields]) => fields.user === 1 && fields.isRecurring === 1 && fields.nextRunAt === 1
+      )
+      expect(hasDueTemplateIndex).toBe(true)
+    })
+
+    it('has a unique partial index on recurringGroupId + date to dedupe generated occurrences', () => {
+      const indexes = Expense.schema.indexes()
+      const dedupeIndex = indexes.find(
+        ([fields]) => fields.recurringGroupId === 1 && fields.date === 1
+      )
+      expect(dedupeIndex).toBeDefined()
+      const [, options] = dedupeIndex
+      expect(options.unique).toBe(true)
+      expect(options.partialFilterExpression).toEqual({ recurringGroupId: { $exists: true } })
     })
   })
 
