@@ -1,17 +1,5 @@
 import * as expenseService from '../services/expense.service.js'
-
-const serializeExpense = (e) => ({
-  id: e._id,
-  amount: e.amount ? e.amount.toString() : null,
-  currency: e.currency || 'USD',
-  category: e.category
-    ? { id: e.category._id, name: e.category.name, icon: e.category.icon || null, color: e.category.color || null }
-    : null,
-  date: e.date,
-  notes: e.notes || null,
-  receiptId: e.receipt ? e.receipt.toString() : null,
-  createdAt: e.createdAt
-})
+import { serializeExpense } from '../utils/serializeExpense.js'
 
 export const listExpenses = async (req, res, next) => {
   try {

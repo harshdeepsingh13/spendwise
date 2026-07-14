@@ -1,9 +1,10 @@
 import * as analyticsService from '../services/analytics.service.js'
+import { serializeExpense } from '../utils/serializeExpense.js'
 
 export const getDashboard = async (req, res, next) => {
   try {
     const result = await analyticsService.getDashboardData(req.user._id)
-    res.json(result)
+    res.json({ ...result, recent: (result.recent || []).map(serializeExpense) })
   } catch (err) {
     next(err)
   }

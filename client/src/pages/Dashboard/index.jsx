@@ -386,7 +386,7 @@ export default function DashboardPage() {
               ) : (
                 <Box>
                   {recentExpenses.map(expense => (
-                    <RecentExpenseRow key={expense._id} expense={expense} />
+                    <RecentExpenseRow key={expense.id} expense={expense} />
                   ))}
                 </Box>
               )}
@@ -436,7 +436,7 @@ export default function DashboardPage() {
               ) : (
                 <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
                   {recentReceipts.map(receipt => (
-                    <ReceiptThumb key={receipt._id} receipt={receipt} />
+                    <ReceiptThumb key={receipt.id} receipt={receipt} />
                   ))}
                 </Box>
               )}

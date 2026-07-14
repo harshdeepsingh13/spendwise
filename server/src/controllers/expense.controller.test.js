@@ -46,6 +46,10 @@ const serialized = (e) => ({
   date: e.date,
   notes: e.notes || null,
   receiptId: e.receipt ? e.receipt.toString() : null,
+  isRecurring: Boolean(e.isRecurring),
+  frequency: e.frequency || null,
+  interval: e.interval || null,
+  recurrenceEndDate: e.recurrenceEndDate || null,
   createdAt: e.createdAt
 })
 
@@ -111,6 +115,17 @@ describe('listExpenses', () => {
 
     const [result] = res.json.mock.calls[0][0]
     expect(result.category).toBeNull()
+  })
+
+  it('serializes a linked receipt id to a string', async () => {
+    const expense = makeMockExpense({ receipt: { toString: () => 'r99' } })
+    expenseService.listExpenses.mockResolvedValue([expense])
+
+    const { req, res, next } = makeReqResNext()
+    await listExpenses(req, res, next)
+
+    const [result] = res.json.mock.calls[0][0]
+    expect(result.receiptId).toBe('r99')
   })
 
   it('calls next(err) on service error', async () => {

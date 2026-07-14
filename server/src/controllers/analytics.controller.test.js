@@ -1,10 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { getDashboard, getMonthly, getYearly } from './analytics.controller.js'
+import {
+  getDashboard,
+  getMonthly,
+  getYearly,
+  getSummary,
+  getKpi,
+  getBudgetVsActual,
+} from './analytics.controller.js'
 
 vi.mock('../services/analytics.service.js', () => ({
   getDashboardData: vi.fn(),
   getMonthlyData: vi.fn(),
   getYearlyData: vi.fn(),
+  getSummary: vi.fn(),
+  getKpiData: vi.fn(),
+  getBudgetVsActual: vi.fn(),
 }))
 
 import * as analyticsService from '../services/analytics.service.js'
@@ -45,6 +55,41 @@ describe('getDashboard', () => {
     expect(analyticsService.getDashboardData).toHaveBeenCalledWith('user123')
     expect(res.json).toHaveBeenCalledWith(data)
     expect(next).not.toHaveBeenCalled()
+  })
+
+  it('serializes each recent expense before responding', async () => {
+    const data = {
+      currentMonth: 500,
+      byCategory: [],
+      recent: [
+        { _id: 'exp1', amount: { toString: () => '12.50' }, date: new Date('2026-05-01') },
+      ],
+    }
+    analyticsService.getDashboardData.mockResolvedValue(data)
+
+    const req = makeReq()
+    const res = makeRes()
+    const next = vi.fn()
+
+    await getDashboard(req, res, next)
+
+    const payload = res.json.mock.calls[0][0]
+    expect(payload.recent).toEqual([
+      expect.objectContaining({ id: 'exp1', amount: '12.50', currency: 'USD', category: null }),
+    ])
+    expect(payload.currentMonth).toBe(500)
+  })
+
+  it('defaults recent to an empty array when service omits it', async () => {
+    analyticsService.getDashboardData.mockResolvedValue({ currentMonth: 0 })
+
+    const req = makeReq()
+    const res = makeRes()
+    const next = vi.fn()
+
+    await getDashboard(req, res, next)
+
+    expect(res.json).toHaveBeenCalledWith({ currentMonth: 0, recent: [] })
   })
 
   it('passes error to next on service failure', async () => {
