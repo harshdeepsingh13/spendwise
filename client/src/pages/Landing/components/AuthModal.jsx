@@ -9,6 +9,7 @@ import { useAuthContext } from '../../../context/AuthContext'
 
 export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
   const [tab, setTab] = useState(defaultTab === 'login' ? 1 : 0)
+  const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -36,6 +37,7 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
   }, [open])
 
   const reset = () => {
+    setDisplayName('')
     setEmail('')
     setPassword('')
     setConfirmPassword('')
@@ -68,7 +70,7 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
     try {
       let data
       if (tab === 0) {
-        data = await authService.signup(email, password)
+        data = await authService.signup(email, password, displayName)
       } else {
         data = await authService.login(email, password)
         if (data.requiresMfa) {
@@ -166,6 +168,16 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
       {error && <Alert severity="error" sx={{ mb: 1 }}>{error}</Alert>}
 
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+        {tab === 0 && (
+          <TextField
+            label="Name"
+            value={displayName}
+            onChange={e => setDisplayName(e.target.value)}
+            fullWidth
+            autoComplete="name"
+            autoFocus
+          />
+        )}
         <TextField
           label="Email address"
           type="email"
@@ -205,6 +217,16 @@ export default function AuthModal({ open, onClose, defaultTab = 'signup' }) {
         >
           {loading ? 'Please wait…' : tab === 0 ? 'Create free account →' : 'Sign in →'}
         </Button>
+        {tab === 1 && (
+          <Button
+            variant="text"
+            size="small"
+            onClick={() => { reset(); onClose(); navigate('/forgot-password') }}
+            sx={{ alignSelf: 'center' }}
+          >
+            Forgot password?
+          </Button>
+        )}
       </Box>
 
       <Divider sx={{ my: 0.5 }}>

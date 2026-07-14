@@ -3,6 +3,8 @@ import passport from 'passport'
 import {
   signup,
   login,
+  forgotPassword,
+  resetPassword,
   handleOAuthCallback,
   refresh,
   getMe,
@@ -20,6 +22,10 @@ const router = Router()
 // Local auth
 router.post('/signup', authRateLimit, signup)
 router.post('/login',  authRateLimit, login)
+
+// Password reset
+router.post('/forgot-password', authRateLimit, forgotPassword)
+router.post('/reset-password',  authRateLimit, resetPassword)
 
 // OAuth
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }))

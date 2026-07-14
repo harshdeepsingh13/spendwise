@@ -1,10 +1,41 @@
+import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import speakeasy from 'speakeasy'
 import QRCode from 'qrcode'
 import { User } from '../models/User.model.js'
 import { env } from '../config/env.js'
+import { sendMail } from '../utils/mailer.js'
 
-function signAccessToken(userId) {
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000 // 1 hour
+
+/**
+ * Enforces the app's password policy (min length + at least one number/special char).
+ * @param {string} password - Candidate password.
+ * @throws {Error} 400 when the password is too weak.
+ */
+function assertStrongPassword(password) {
+  if (!password || password.length < 8) {
+    const err = new Error('Password must be at least 8 characters')
+    err.status = 400
+    throw err
+  }
+  if (!/[0-9!@#$%^&*]/.test(password)) {
+    const err = new Error('Password must contain at least one number or special character (!@#$%^&*)')
+    err.status = 400
+    throw err
+  }
+}
+
+/**
+ * Hashes a reset token for at-rest storage so a DB leak can't be used to reset passwords.
+ * @param {string} token - Raw token from the reset link.
+ * @returns {string} SHA-256 hex digest.
+ */
+function hashResetToken(token) {
+  return crypto.createHash('sha256').update(token).digest('hex')
+}
+
+export function signAccessToken(userId) {
   return jwt.sign({ sub: userId.toString() }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRE })
 }
 
@@ -33,16 +64,7 @@ export async function createUser({ email, password, displayName }) {
     err.status = 400
     throw err
   }
-  if (password.length < 8) {
-    const err = new Error('Password must be at least 8 characters')
-    err.status = 400
-    throw err
-  }
-  if (!/[0-9!@#$%^&*]/.test(password)) {
-    const err = new Error('Password must contain at least one number or special character (!@#$%^&*)')
-    err.status = 400
-    throw err
-  }
+  assertStrongPassword(password)
   const existing = await User.findOne({ email })
   if (existing) {
     const err = new Error(
@@ -135,6 +157,70 @@ export async function refreshAccessToken(refreshToken) {
 
 export async function logoutUser(userId) {
   await User.findByIdAndUpdate(userId, { refreshToken: null })
+}
+
+/**
+ * Starts a password reset: generates a one-time token, stores its hash + expiry on the
+ * user, and emails the reset link. Always resolves without revealing whether the email
+ * exists (no user enumeration). OAuth-only accounts (no password) are skipped silently.
+ *
+ * @param {string} email - Email that requested the reset.
+ * @returns {Promise<void>}
+ */
+export async function requestPasswordReset(email) {
+  if (!email) return
+  const user = await User.findOne({ email: email.toLowerCase() })
+  if (!user || !user.password) return
+
+  const token = crypto.randomBytes(32).toString('hex')
+  user.resetToken = hashResetToken(token)
+  user.resetTokenExpiry = new Date(Date.now() + RESET_TOKEN_TTL_MS)
+  await user.save()
+
+  const resetUrl = `${env.CLIENT_URL}/reset-password?token=${token}`
+  await sendMail({
+    to: user.email,
+    subject: 'Reset your Spendwise password',
+    text: `Reset your password using this link (valid for 1 hour): ${resetUrl}`,
+    html: `<p>We received a request to reset your Spendwise password.</p>
+<p><a href="${resetUrl}">Click here to choose a new password</a>. This link is valid for 1 hour.</p>
+<p>If you didn't request this, you can safely ignore this email.</p>`,
+  })
+}
+
+/**
+ * Completes a password reset: validates the token + new password, sets the new password,
+ * and invalidates the reset token and any existing session.
+ *
+ * @param {string} token - Raw token from the reset link.
+ * @param {string} newPassword - New password (must satisfy the password policy).
+ * @returns {Promise<void>}
+ * @throws {Error} 400 for a missing/invalid/expired token or a weak password.
+ */
+export async function resetPassword(token, newPassword) {
+  if (!token) {
+    const err = new Error('Invalid or expired reset link')
+    err.status = 400
+    throw err
+  }
+  assertStrongPassword(newPassword)
+
+  const user = await User.findOne({
+    resetToken: hashResetToken(token),
+    resetTokenExpiry: { $gt: new Date() },
+  }).select('+resetToken +resetTokenExpiry')
+
+  if (!user) {
+    const err = new Error('Invalid or expired reset link')
+    err.status = 400
+    throw err
+  }
+
+  user.password = newPassword
+  user.resetToken = undefined
+  user.resetTokenExpiry = undefined
+  user.refreshToken = undefined
+  await user.save()
 }
 
 export async function generateMfaSetup(userId) {

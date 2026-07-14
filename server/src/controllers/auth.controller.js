@@ -44,6 +44,25 @@ export const handleOAuthCallback = async (req, res) => {
   res.redirect(`${env.CLIENT_URL}/auth/callback?token=${accessToken}`)
 }
 
+export const forgotPassword = async (req, res, next) => {
+  try {
+    await authService.requestPasswordReset(req.body.email)
+    // Always generic to avoid revealing whether the email is registered
+    res.json({ message: 'If an account exists for that email, a reset link has been sent.' })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    await authService.resetPassword(req.body.token, req.body.password)
+    res.json({ message: 'Password has been reset. You can now sign in.' })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const refresh = async (req, res, next) => {
   try {
     const refreshToken = req.cookies?.refreshToken
